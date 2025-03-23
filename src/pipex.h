@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/03/23 21:05:10 by mergarci         ###   ########.fr       */
+/*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
+/*   Updated: 2025/03/23 21:03:42 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#ifndef PIPEX_H
+# define FRACTOL_H
 
-int main(int argc, char *argv[])
-{
-    int err; 
-    int fd = access("/bin/", F_OK);
-    if (fd == -1) {
-        printf("Error Number: %d\n", errno);
-        perror("Error Description:");
-    } else {
-        printf("No error\n");
-    }
-    
-    return (0);
-}
+# include "../libft/ft_printf.h"
+# include <unistd.h>
+# include <stdio.h>
+
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+//inputs.c
+int check_argv(int argc, char *argv[]);
+
+#endif

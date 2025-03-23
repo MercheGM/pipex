@@ -15,7 +15,8 @@ NAME_INC		= pipex.h
 LIBFT   = $(PATH_LIBFT)$(NAME_LIBFT)
 
 INC	=	$(PATH_SRC)$(NAME_INC)
-SRC	=	$(PATH_SRC)main.c
+SRC	=	$(PATH_SRC)main.c \
+		$(PATH_SRC)inputs.c
 OBJ	=	$(patsubst $(PATH_SRC)%.c, $(PATH_OBJ)%.o, $(SRC))
 
 all: $(LIBFT) $(NAME)
