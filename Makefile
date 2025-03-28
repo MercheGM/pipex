@@ -1,6 +1,6 @@
 CC          = cc
-CFLAGS      = -g3 -fsanitize=address -I$(PATH_SRC)
-#-Wall -Wextra -Werror
+CFLAGS      = -I$(PATH_SRC)
+#-Wall -Wextra -Werror -g3 -fsanitize=address
 
 RM          = @rm -f
 
@@ -16,7 +16,8 @@ LIBFT   = $(PATH_LIBFT)$(NAME_LIBFT)
 
 INC	=	$(PATH_SRC)$(NAME_INC)
 SRC	=	$(PATH_SRC)main.c \
-		$(PATH_SRC)inputs.c
+		$(PATH_SRC)inputs.c \
+		$(PATH_SRC)utils.c 
 OBJ	=	$(patsubst $(PATH_SRC)%.c, $(PATH_OBJ)%.o, $(SRC))
 
 all: $(LIBFT) $(NAME)
