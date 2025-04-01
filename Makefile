@@ -1,5 +1,5 @@
 CC          = cc
-CFLAGS      = -I$(PATH_SRC)
+CFLAGS      = -g3 -fsanitize=address -I$(PATH_SRC)
 #-Wall -Wextra -Werror -g3 -fsanitize=address
 
 RM          = @rm -f

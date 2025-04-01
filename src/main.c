@@ -6,37 +6,46 @@
 /*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/03/31 21:14:35 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/01 20:20:48 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	ft_child(int *fd, char *argv[])
+int ft_dup_close(int fd_old, int fd_new)
+{
+	dup2(fd_old, fd_new);
+	close(fd_old);
+	return(errno);
+}
+
+int	ft_child(int *fd, char *command, char *infile)
 {
 	char *path = "/bin/cat";
 	char *args[] = {"/bin/cat", NULL};
     char *envp[] = {"PATH=/bin/", NULL};
 	
-	int fd_file = open("src/main.c", O_RDONLY);
+	int fd_file = open(infile, O_RDONLY);
 	if (fd_file > 0)
 	{
 		close(fd[READ]); /*cerramos extremo no necesario*/
 		printf("primer hijo: %d\n", getpid());
-		dup2(fd_file, STDIN_FILENO);
-		dup2(fd[WRITE], STDOUT_FILENO);
-		close(fd[WRITE]);
+		if (!ft_dup_close(fd[WRITE], STDOUT_FILENO) | !dup2(fd_file, STDIN_FILENO))
+			exit(errno);
 		if (execve(path,args, envp) == -1)
 		{
-			printf("cierro fd_file\n");
 			close(fd_file);
-			exit(1);
+			perror("child");
+			exit(errno);
 		}
 		exit (0);
 	}
 	else
-		ft_printf("error abriendo fichero de entrada\n");
-		
+	{
+		perror("child");
+		exit(errno);
+	}
+	return (errno);	
 }
 
 int	ft_parent(int *fd, char *command, char *outfile)
@@ -45,25 +54,24 @@ int	ft_parent(int *fd, char *command, char *outfile)
 	char *path = "/bin/wc";
 	char *args[] = {"/bin/wc", "-l",NULL};
 	char *envp[] = {"PATH=/bin/", NULL};
-	
+
 	printf("padre: %d\n", getpid());
 	close(fd[WRITE]); 
-	printf("outfile: %s\n", outfile);
 	fd_file = open(outfile, O_CREAT |  O_WRONLY, 0644);  /*utilizar O_EXCL para NO sobreescribir el fichero*/
 	if (fd_file > 0)
 	{
-		dup2(fd[READ], STDIN_FILENO);
-		close(fd[READ]);
-		dup2(fd_file, STDOUT_FILENO);
-		close(fd_file);
+		if (!ft_dup_close(fd[READ], STDIN_FILENO) | !ft_dup_close(fd_file, STDOUT_FILENO))
+			exit(errno);
 		if (execve(path,args, envp) == -1)
 		{
-			printf("cierro fd_file\n");
 			close(fd_file);
-			exit(1);
+			perror("parent");
+			exit(errno);
 		}
 	}
 	close(fd[READ]);
+	perror("parent");
+	exit(errno);
 }
 
 int main(int argc, char *argv[])
@@ -74,26 +82,30 @@ int main(int argc, char *argv[])
 	int status;
 	char buf[50];
 	int num_bytes;
-	
+	char *aux;
+
 	if (argc == 5)
 	{
-		info = ft_split(*argv, " "); //ver qué se recibe y separar los argumentos
-		printf("0: %s\n", info[0]);
-		printf("1: %s\n", info[1]);
-		printf("2: %s\n", info[2]);
-		printf("3: %s\n", info[3]);
-		printf("4: %s\n", info[4]);
 		if (pipe(fd) != 0)
 			return (1);
 		pid = fork();
 		if (pid == 0)  //primer hijo
 		{
-			ft_child(fd, argv);
+			status = ft_child(fd, argv[2], argv[1]);
 		}
 		else //estamos en el padre
 		{
 			waitpid(pid, &status, 0);
-			ft_parent(fd, info[3], info[4]);
+			if (WEXITSTATUS(status) == 0)
+			{
+				printf("padre: status: %d\n", status);
+				printf("padre: WEXITSTATUS(status): %d\n", WEXITSTATUS(status));
+				ft_parent(fd, argv[3], argv[4]);
+			}
+			else
+			{
+				exit(WEXITSTATUS(status));
+			}
 		}
 	}
 	else 
