@@ -6,38 +6,44 @@
 /*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/01 20:20:48 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/06 21:26:19 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int ft_dup_close(int fd_old, int fd_new)
+int ft_dup_close(int *fd_old, int fd_new)
 {
-	dup2(fd_old, fd_new);
-	close(fd_old);
+	dup2(*fd_old, fd_new);
+	close(*fd_old);
 	return(errno);
 }
 
 int	ft_child(int *fd, char *command, char *infile)
 {
-	char *path = "/bin/cat";
-	char *args[] = {"/bin/cat", NULL};
-    char *envp[] = {"PATH=/bin/", NULL};
-	
+
 	int fd_file = open(infile, O_RDONLY);
 	if (fd_file > 0)
 	{
+		//check_command(command);
 		close(fd[READ]); /*cerramos extremo no necesario*/
-		printf("primer hijo: %d\n", getpid());
-		if (!ft_dup_close(fd[WRITE], STDOUT_FILENO) | !dup2(fd_file, STDIN_FILENO))
+		printf("primer hijo: %d. FD_FILE: %d\n", getpid(), fd_file);
+		dup2(fd[WRITE], STDOUT_FILENO);
+		close(fd[WRITE]);
+		dup2(fd_file, STDIN_FILENO);
+		/*if (!ft_dup_close(&fd[WRITE], STDOUT_FILENO) && !dup2(fd_file, STDIN_FILENO))
+		{
 			exit(errno);
-		if (execve(path,args, envp) == -1)
+		}*/
+		printf("err hijo: %d\n", errno);
+
+		check_command(command);
+		/*if (execve(path,args, envp) == -1)
 		{
 			close(fd_file);
 			perror("child");
 			exit(errno);
-		}
+		}*/
 		exit (0);
 	}
 	else
@@ -51,23 +57,24 @@ int	ft_child(int *fd, char *command, char *infile)
 int	ft_parent(int *fd, char *command, char *outfile)
 {
 	int fd_file;
-	char *path = "/bin/wc";
-	char *args[] = {"/bin/wc", "-l",NULL};
-	char *envp[] = {"PATH=/bin/", NULL};
 
 	printf("padre: %d\n", getpid());
 	close(fd[WRITE]); 
-	fd_file = open(outfile, O_CREAT |  O_WRONLY, 0644);  /*utilizar O_EXCL para NO sobreescribir el fichero*/
+	fd_file = open(outfile, O_CREAT | O_WRONLY, 0644);  /*utilizar O_EXCL para NO sobreescribir el fichero*/
 	if (fd_file > 0)
 	{
-		if (!ft_dup_close(fd[READ], STDIN_FILENO) | !ft_dup_close(fd_file, STDOUT_FILENO))
-			exit(errno);
-		if (execve(path,args, envp) == -1)
+		dup2(fd[READ], STDIN_FILENO);
+		close(fd[READ]);
+		dup2(fd_file, STDOUT_FILENO);
+		/*if (!ft_dup_close(&fd[READ], STDIN_FILENO) && !dup2(fd_file, STDOUT_FILENO))
+			exit(errno);*/
+		check_command(command);
+		/*if (execve(path,args, envp) == -1)
 		{
 			close(fd_file);
 			perror("parent");
 			exit(errno);
-		}
+		}*/
 	}
 	close(fd[READ]);
 	perror("parent");
@@ -98,8 +105,6 @@ int main(int argc, char *argv[])
 			waitpid(pid, &status, 0);
 			if (WEXITSTATUS(status) == 0)
 			{
-				printf("padre: status: %d\n", status);
-				printf("padre: WEXITSTATUS(status): %d\n", WEXITSTATUS(status));
 				ft_parent(fd, argv[3], argv[4]);
 			}
 			else

@@ -31,7 +31,7 @@
 
 //inputs.c
 char  **check_argv(int argc, char *argv[]);
-char *check_command(char *command);
+int check_command(char *command);
 
 //utils.c
 char *free_memory(char *ptr);
