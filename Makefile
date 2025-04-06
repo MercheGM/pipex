@@ -1,5 +1,5 @@
 CC          = cc
-CFLAGS      = -g3 -fsanitize=address -I$(PATH_SRC)
+CFLAGS      = -I$(PATH_SRC)
 #-Wall -Wextra -Werror -g3 -fsanitize=address
 
 RM          = @rm -f
@@ -35,7 +35,7 @@ $(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
 clean:
-	$(RM) *.o
+	$(RM) $(PATH_OBJ)*.o
 	$(MAKE) clean -C $(PATH_LIBFT)
 
 fclean: clean
