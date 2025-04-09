@@ -53,4 +53,5 @@ dkms.conf
 
 #personalizados
 pipex
+*.txt
 .vscode/
