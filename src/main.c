@@ -3,47 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/06 21:26:19 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/09 20:48:43 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int ft_dup_close(int *fd_old, int fd_new)
+int	ft_dup_close(int *fd_old, int fd_new)
 {
 	dup2(*fd_old, fd_new);
 	close(*fd_old);
-	return(errno);
+	return (errno);
 }
 
-int	ft_child(int *fd, char *command, char *infile)
+int	ft_child(int *fd, char *command, char *infile, char **envp)
 {
+	int	fd_file;
 
-	int fd_file = open(infile, O_RDONLY);
+	fd_file = open(infile, O_RDONLY);
 	if (fd_file > 0)
 	{
-		//check_command(command);
-		close(fd[READ]); /*cerramos extremo no necesario*/
-		printf("primer hijo: %d. FD_FILE: %d\n", getpid(), fd_file);
+		close(fd[READ]);
 		dup2(fd[WRITE], STDOUT_FILENO);
 		close(fd[WRITE]);
 		dup2(fd_file, STDIN_FILENO);
-		/*if (!ft_dup_close(&fd[WRITE], STDOUT_FILENO) && !dup2(fd_file, STDIN_FILENO))
-		{
-			exit(errno);
-		}*/
-		printf("err hijo: %d\n", errno);
-
-		check_command(command);
-		/*if (execve(path,args, envp) == -1)
-		{
-			close(fd_file);
-			perror("child");
-			exit(errno);
-		}*/
+		check_command(command, envp);
 		exit (0);
 	}
 	else
@@ -51,69 +38,51 @@ int	ft_child(int *fd, char *command, char *infile)
 		perror("child");
 		exit(errno);
 	}
-	return (errno);	
+	return (errno);
 }
 
-int	ft_parent(int *fd, char *command, char *outfile)
+int	ft_parent(int *fd, char *command, char *outfile, char **envp)
 {
-	int fd_file;
+	int	fd_file;
 
-	printf("padre: %d\n", getpid());
-	close(fd[WRITE]); 
-	fd_file = open(outfile, O_CREAT | O_WRONLY, 0644);  /*utilizar O_EXCL para NO sobreescribir el fichero*/
+	close(fd[WRITE]);
+	fd_file = open(outfile, O_CREAT | O_WRONLY, 0644);
 	if (fd_file > 0)
 	{
 		dup2(fd[READ], STDIN_FILENO);
 		close(fd[READ]);
 		dup2(fd_file, STDOUT_FILENO);
-		/*if (!ft_dup_close(&fd[READ], STDIN_FILENO) && !dup2(fd_file, STDOUT_FILENO))
-			exit(errno);*/
-		check_command(command);
-		/*if (execve(path,args, envp) == -1)
-		{
-			close(fd_file);
-			perror("parent");
-			exit(errno);
-		}*/
+		check_command(command, envp);
 	}
 	close(fd[READ]);
 	perror("parent");
 	exit(errno);
 }
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *envp[])
 {
-	int fd[2];
-	char **info;
-	pid_t pid;
-	int status;
-	char buf[50];
-	int num_bytes;
-	char *aux;
-
+	int		fd[2];
+	pid_t	pid;
+	int		status;
+	char	*aux;
+	
 	if (argc == 5)
 	{
 		if (pipe(fd) != 0)
 			return (1);
 		pid = fork();
-		if (pid == 0)  //primer hijo
-		{
-			status = ft_child(fd, argv[2], argv[1]);
-		}
-		else //estamos en el padre
+		if (pid == 0)
+			status = ft_child(fd, argv[2], argv[1], envp);
+		else
 		{
 			waitpid(pid, &status, 0);
 			if (WEXITSTATUS(status) == 0)
-			{
-				ft_parent(fd, argv[3], argv[4]);
-			}
+				ft_parent(fd, argv[3], argv[4], envp);
 			else
-			{
 				exit(WEXITSTATUS(status));
-			}
 		}
 	}
-	else 
+	else
 		ft_printf("ERROR: Invalid inputs. Please introduce:\n./pipex infile command1 command2 outfile\n");
 	return (0);
 }
