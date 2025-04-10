@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/09 20:48:43 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/10 17:48:54 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,19 @@ int	ft_parent(int *fd, char *command, char *outfile, char **envp)
 	exit(errno);
 }
 
+void	ft_print_help(void)
+{
+	ft_printf("ERROR: Invalid inputs. Please introduce:\n");
+	ft_printf("./pipex infile command1 command2 outfile\n");
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	int		fd[2];
 	pid_t	pid;
 	int		status;
 	char	*aux;
-	
+
 	if (argc == 5)
 	{
 		if (pipe(fd) != 0)
@@ -83,6 +89,6 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 	}
 	else
-		ft_printf("ERROR: Invalid inputs. Please introduce:\n./pipex infile command1 command2 outfile\n");
+		ft_print_help();
 	return (0);
 }

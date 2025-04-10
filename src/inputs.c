@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   inputs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/09 20:49:23 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/10 17:50:08 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**ft_fill_info(char **aux, char *path,int len)
+char	**ft_fill_info(char **aux, char *path, int len)
 {
 	int		i;
 	char	**args;
-	
+
 	i = 0;
 	args = ft_calloc(len + 1, sizeof(char *));
 	if (args == NULL)
@@ -27,17 +27,18 @@ char	**ft_fill_info(char **aux, char *path,int len)
 		i++;
 	}
 	args[len] = NULL;
-	return(args);
+	return (args);
 }
+
 char	**ft_fill_envp(char **envp)
 {
 	char	**aux;
-	
+
 	aux = ft_calloc(3, sizeof(char *));
 	aux[0] = "PATH=/usr/bin:/bin";
 	aux[1] = envp[0];
 	aux[2] = NULL;
-	return(aux);
+	return (aux);
 }
 
 int	ft_len_command(char **commands)
@@ -69,7 +70,7 @@ int	check_command(char *command, char **envp)
 	}
 	args = ft_fill_info(aux, path, ft_len_command(aux));
 	envp_final = ft_fill_envp(envp);
-	if (execve(path,args, envp) == -1)
+	if (execve(path, args, envp) == -1)
 	{
 		perror("child");
 		exit(errno);
