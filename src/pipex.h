@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/09 20:49:02 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/12 11:21:19 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,15 @@
 # include <stdlib.h>
 # include <string.h>
 
-# define READ 0 /*extremo lectura*/
-# define WRITE 1 /*extremo escritura*/
+# define READ 0 
+# define WRITE 1 
+
+//pipes.c
+int		ft_child(int *fd, char *command, char *infile, char **envp);
+int		ft_parent(int *fd, char *command, char *outfile, char **envp);
+void	ft_print_help(void);
 
 //inputs.c
-char	**check_argv(int argc, char *argv[]);
 int		check_command(char *command, char **envp);
-
-//utils.c
-//char *free_memory(char *ptr);
 
 #endif
