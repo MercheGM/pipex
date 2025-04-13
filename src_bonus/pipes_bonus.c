@@ -6,18 +6,19 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/12 11:57:46 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:26:07 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
 /*Function to manage fd's child process. It check the command and execute it*/
-int	ft_child(int *fd, char *command, char *infile, char **envp)
+int	ft_first_child(int *fd, char *command, char *infile, char **envp)
 {
 	int	fd_file;
-
+	
 	fd_file = open(infile, O_RDONLY);
+	//printf("fd: %d\n", fd_file);
 	if (fd_file > 0)
 	{
 		close(fd[READ]);
@@ -32,6 +33,31 @@ int	ft_child(int *fd, char *command, char *infile, char **envp)
 		perror(infile);
 		exit(errno);
 	}
+	return (errno);
+}
+
+/*Function to manage fd's child process. It check the command and execute it*/
+int	ft_middle_child(int *fd, char *command, char **envp)
+{
+	int	fd_file;
+
+	//fd_file = open(infile, O_RDONLY);
+	//if (fd_file > 0)
+	//{
+	//	close(fd[READ]);
+		dup2(fd[WRITE], STDOUT_FILENO);
+		close(fd[WRITE]);
+		dup2(fd[READ], STDIN_FILENO);
+		close(fd[READ]);
+		check_command(command, envp);
+		perror("eoo");
+		exit (0);
+	/*}
+	else
+	{
+		perror(infile);
+		exit(errno);
+	}*/
 	return (errno);
 }
 
