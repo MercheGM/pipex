@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/13 21:22:25 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/15 21:46:05 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	int		fd[2];
+	int		*fd[2];
+	//int		fd2[2];
 	pid_t	pid;
 	int		status;
 	int		cont;
@@ -24,7 +25,7 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		while (cont < argc - 2)
 		{
-			if (pipe(fd) != 0)
+			if (pipe(*fd) != 0)
 				return (1);
 			pid = fork();
 			if (pid == 0)
@@ -32,7 +33,7 @@ int	main(int argc, char *argv[], char *envp[])
 				if (cont == 2)
 				{
 					printf("\tHIJO PID: %d. Accede al comando: %s. Contador: %d\n", getpid(), argv[cont], cont);
-					ft_first_child(fd, argv[cont], argv[cont - 1], envp);
+					ft_first_child(*fd, argv[cont], argv[cont - 1], envp);
 					exit (0);
 					//abrimos fichero input
 				}
@@ -45,7 +46,7 @@ int	main(int argc, char *argv[], char *envp[])
 				else if (cont < argc - 2)
 				{
 					printf("\tHIJO PID: %d. Accede al comando: %s. Contador: %d. Contador - 2: %d\n", getpid(), argv[cont], cont, cont -2);
-					ft_middle_child(fd, argv[cont], envp);
+					ft_middle_child(*fd, argv[cont], envp);
 					perror("after child_n");
 					exit (0);
 				}
@@ -66,7 +67,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (cont == argc - 1)
 		{
 			printf("PADRE PID: %d.Accede al comando: %s. Contador: %d\n", getpid(),argv[cont], cont);
-			ft_parent(fd, argv[cont], argv[cont + 1], envp);
+			ft_parent(*fd, argv[cont], argv[cont + 1], envp);
 		}
 	}
 	else
