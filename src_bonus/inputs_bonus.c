@@ -6,19 +6,19 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/15 22:07:05 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:30:05 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-/*Function counts number of commands*/
-static int	ft_len_command(char **commands)
+/*Function counts number of strings*/
+int	ft_count_string(char **string)
 {
 	int	len;
 
 	len = 0;
-	while (commands[len])
+	while (string[len])
 		len++;
 	return (len);
 }
@@ -48,7 +48,7 @@ int	check_command(char *command, char **envp)
 	args = ft_split(command, ' ');
 	if (args == NULL)
 		exit (errno);
-	else if (ft_len_command(args) == 1)
+	else if (ft_count_string(args) == 1)
 		args = ft_add_null(args);
 	path = ft_strjoin("/bin/", args[0]);
 	if (access(path, X_OK) < 0)
