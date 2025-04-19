@@ -6,132 +6,112 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/17 15:33:07 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:51:35 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-/*int	main(int argc, char *argv[], char *envp[])
+void ft_hijo(int *prev_pipe, int num_commands, int *fd, int i)
 {
-	//int		*fd[2];
-	int		fd[2];
-	int		fd2[2];
-	pid_t	pid;
-	int		status;
-	int		cont;
+	int fd_outfile;
 	
-	cont = 2;
-	if (argc >= 5)
+	if (prev_pipe[0] != -1) {
+		// Si existe un pipe previo, redirigir su salida a la entrada estándar
+		dup2(prev_pipe[0], STDIN_FILENO);
+		close(prev_pipe[0]);
+	}
+
+	if (i < num_commands - 1) 
 	{
-		while (cont < argc - 2)
-		{
-			fd2[READ] = fd[READ];
-			fd2[WRITE] = fd[WRITE];
-			printf("W%d-fd[WRITE]: %d, fd[READ]: %d\n", cont, fd[WRITE], fd[READ]);
-			printf("W%d-fd2[WRITE]: %d, fd2[READ]: %d\n", cont, fd2[WRITE], fd2[READ]);
-			if (pipe(fd) != 0)
-				return (1);
-			pid = fork();
-			if (pid == 0)
-			{
-				if (cont == 2)
-				{
-					//fd2[READ] = fd[READ];
-					//fd2[WRITE] = fd[WRITE];
-					printf("fd[WRITE]: %d, fd[READ]: %d\n", fd[WRITE], fd[READ]);
-					printf("fd2[WRITE]: %d, fd2[READ]: %d\n", fd2[WRITE], fd2[READ]);
-					printf("\tHIJO PID: %d. Accede al comando: %s. Contador: %d\n", getpid(), argv[cont], cont);
-					ft_first_child(fd, fd2, argv[cont], argv[cont - 1], envp);
-					exit (0);
-					//abrimos fichero input
-				}
-
-					//abrimos fichero output
-				else if (cont <= argc - 2)
-				{
-					printf("fd[WRITE]: %d, fd[READ]: %d\n", fd[WRITE], fd[READ]);
-					printf("fd2[WRITE]: %d, fd2[READ]: %d\n", fd2[WRITE], fd2[READ]);
-
-					printf("\tHIJO PID: %d. Accede al comando: %s. Contador: %d. Contador - 2: %d\n", getpid(), argv[cont], cont, cont -2);
-					ft_middle_child(fd, fd2, argv[cont], envp);
-					perror("after child_n");
-					exit (0);
-				}
-					//status = ft_child(fd, argv[2], argv[1], envp);
-			}
-			//printf("descritpr lectura: %d\n", fd[WRITE]);
-			waitpid(pid, &status, 0);
-			//else
-			//{
-			//	waitpid(pid, &status, 0);
-				//ft_parent(fd, argv[cont], argv[cont + 1], envp);
-			//}
-			
-			//waitpid(pid, &status, 0);
-			//perror("after wait");
-			cont++;
-		}
-		
-		if (cont == argc - 1)
-		{
-			printf("PADRE PID: %d.Accede al comando: %s. Contador: %d\n", getpid(),argv[cont], cont);
-			ft_parent(fd, argv[cont], argv[cont + 1], envp);
-		}
+		// Si no es el último comando, redirigir la salida a un pipe
+		dup2(fd[WRITE_END], STDOUT_FILENO);
 	}
 	else
-		ft_print_help();
-	return (0);
-}*/
-
-
-int	main(int argc, char *argv[], char *envp[])
-{
-	int		fd[2];
-	int		fd2[2];
-	pid_t	pid;
-	int		status;
-	int		cont;
-	int prev_pipe_fd;   // Descripción para el pipe del comando anterior
-	int		fd_outfile;
-	int		fd_infile;
-	
-	if (argc >= 5)
 	{
-		cont = 2;
-		prev_pipe_fd = -1;
-		while (cont <= argc - 2)
-		{
-			if (cont != argc -2)
-			{
-				if (pipe(fd) != 0)
-					exit (errno);
-			}
-			pid = fork();
-			if (pid < 0) {
-				perror("fork");
-				exit(errno);
-			}
-			if (pid == 0)
-			{
-				ft_child_2(prev_pipe_fd, fd, cont, argv, envp);
-				exit(0);
-			}
-			waitpid(pid, &status, 0);
-			if (prev_pipe_fd != -1)
-            	close(prev_pipe_fd);
-
-	        // Para el siguiente proceso, el extremo de lectura del pipe actual será la entrada
-	        if (cont < argc - 2) {
-	            close(fd[WRITE]);  // Cerramos el extremo de escritura en el padre
-	            prev_pipe_fd = fd[READ];
-	        }
-			
-			cont++;
-		}
+		dup2(prev_pipe[1], STDOUT_FILENO);
 	}
-	else
-		ft_print_help();
-	return (0);
+
+	// Cerrar los extremos del pipe que no estamos utilizando
+	close(fd[READ_END]);
+	close(fd[WRITE_END]);
+
 }
+
+void execute_pipeline(int fd_infile, char **commands, char **envp)
+{
+    int i;
+	int fd[2];
+    int status;
+	int pid;
+    int prev_pipe[2];
+	int argc;
+
+	argc = ft_count_string(commands);	
+	prev_pipe[0] = fd_infile;
+	prev_pipe[1] = -1;
+	i = 2;
+    while (i <= argc - 2)
+	{
+        pipe(fd);  // Crear un pipe para cada par de procesos
+        pid = fork();
+        if (pid == 0) 
+		{  // Proceso hijo
+			if (i == argc - 2)
+			{
+				prev_pipe[1] = open(commands[i+1], O_CREAT | O_WRONLY, 0644);
+				if (prev_pipe[1] == 1)
+				{
+					perror("outfile");
+					exit(errno);
+				}
+			}
+			printf("comando a ejecutar: %s\n", commands[i]);
+            ft_hijo(prev_pipe, argc - 2, fd, i);
+			// Ejecutar el comando correspondiente
+			check_command(commands[i],envp);
+			//execve(commands[i][0], commands[i], envp);
+			perror("execvp failed");
+			exit(1);  // En caso de que execvp falle
+        } 
+		else 
+		{  // Proceso padre
+			waitpid(pid, &status, 0);
+            close(fd[WRITE_END]);
+            if (prev_pipe[0] != -1)
+                close(prev_pipe[0]);
+			if (fd_infile != -1)
+                close(fd_infile);
+			if (prev_pipe[1] != -1)
+                close(prev_pipe[1]);		
+            prev_pipe[0] = fd[READ_END];
+        }
+		i++;
+    }
+}
+
+int main(int argc, char *argv[], char *envp[])
+{
+	int fd_infile;
+
+	if (argc < 5)
+	{
+		ft_print_help();
+		exit (EXIT_FAILURE);
+	}
+	fd_infile = open(argv[1], O_RDONLY);
+	if (fd_infile == -1)
+	{
+		perror("infile");
+		exit(errno);
+	}
+    // Ejecutar la tubería de comandos
+    execute_pipeline(fd_infile, argv, envp);
+
+    return 0;
+}
+
+	
+
+	
 	

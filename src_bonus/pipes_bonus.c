@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/17 15:32:23 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/19 18:08:19 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,58 +94,71 @@ void	ft_print_help(void)
 	ft_printf("./pipex infile command1 command2 outfile\n");
 }
 
-int		ft_child_2(int prev_pipe_fd, int *fd, int cont, char **argv, char **envp)
+int		ft_child_2(int *prev_pipe_fd, int *fd, int cont, char **argv, char **envp)
 {
-	int fd_infile;
-	int fd_outfile;
+	int fd_file;
+	//int fd_outfile;
 	int argc;
-
+	int aux = 0;
+	
+	fd_file = -1;
 	argc = ft_count_string(argv);
 	printf("\tHIJO PID: %d. Accede al comando: %s. Contador: %d. Contador - 2: %d\n", getpid(), argv[cont], cont, cont -2);
 
-	if (prev_pipe_fd != -1)
+	/*if (*prev_pipe_fd != -1)
 	{
-		if (dup2(prev_pipe_fd, STDIN_FILENO) == -1)
+		if (dup2(*prev_pipe_fd, STDIN_FILENO) == -1)
 		{
 			perror("dup2 (prev_pipe_fd)");
 			exit(errno);
 		}
 		close(prev_pipe_fd);
-	}
-	if (cont == 2)
+	}*/
+	if (cont == 2) //primer hijo
 	{
-		fd_infile = open(argv[cont - 1], O_RDONLY);
-		if (fd_infile < 0)
+		fd_file = open(argv[cont - 1], O_RDONLY);
+		if (fd_file < 0)
 		{
 			perror(argv[cont + 1]);
 			exit(errno);
 		}
+		dup2(fd[WRITE], STDOUT_FILENO);
+		dup2(fd_file, STDIN_FILENO);
+
 	}
-	else if (cont < argc - 2) {
+	else if (cont < argc - 2) //hijos intermedios
+	{
+		dup2(fd[READ], STDIN_FILENO);
 		if (dup2(fd[WRITE], STDOUT_FILENO) == -1)
 		{
 			perror(ft_itoa(cont));
 			exit(EXIT_FAILURE);
 		}
-		close(fd[READ]); // extremo de lectura
-		close(fd[WRITE]); // extremo de escritura (ya duplicado)
+
 	}
-	else if (cont == argc - 2)
+	else if (cont == argc - 2) //ultimo hijo
 	{
 		printf(".%s.\n",argv[cont + 1]);
-		fd_outfile = open(argv[cont + 1], O_CREAT | O_WRONLY, 0644);
-		if (fd_outfile < 0)
+		fd_file = open(argv[cont + 1], O_CREAT | O_WRONLY, 0644);
+		
+		if (fd_file < 0)
 		{
 			perror(argv[cont + 1]);
 			exit(errno);
 		}
-		if (dup2(fd_outfile, STDOUT_FILENO) == -1)
+		dup2(fd[READ], STDIN_FILENO);
+		if (dup2(fd_file, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 (fd[WRITE])");
 			exit(EXIT_FAILURE);
 		}
 	}
-	check_command(argv[cont], envp);
+	//cleardup2(*prev_pipe_fd, fd[READ]);
+//	*prev_pipe_fd = fd[READ];
+	aux = fd[READ];
+	close(fd[READ]);
+	close(fd[WRITE]);
+
 	//if (prev_pipe_fd != -1)
 //		close(prev_pipe_fd);
 	/*if (cont < argc - 2)
@@ -155,4 +168,5 @@ int		ft_child_2(int prev_pipe_fd, int *fd, int cont, char **argv, char **envp)
 	}*/
 
 	//cont++;
+	return (aux);
 }

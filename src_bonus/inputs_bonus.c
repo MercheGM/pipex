@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/17 15:30:05 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:50:10 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,24 @@ int	ft_count_string(char **string)
 static char	**ft_add_null(char **args)
 {
 	char	**aux;
+	int		num;
+	int		i;
 
-	aux = (char **)ft_calloc(2, sizeof(char *));
-	aux[0] = (char *)ft_calloc(ft_strlen(args[0]) + 1, sizeof(char *));
-	ft_memcpy(aux[0], args[0], ft_strlen(args[0]));
-	aux[1] = NULL;
-	args[0] = ft_memfree(args[0]);
-	args = NULL;
+	num = ft_count_string(args);
+	i = 0;
+	aux = (char **)ft_calloc(num + 1, sizeof(char *));
+	while (i < num)
+	{
+		aux[i] = (char *)ft_calloc(ft_strlen(args[i]) + 1, sizeof(char *));
+		ft_memcpy(aux[i], args[i], ft_strlen(args[i]));
+		i++;
+	}
+	aux[num] = NULL;
+	if (num == 1)
+	{
+		args[0] = ft_memfree(args[0]);
+		args = NULL;
+	}
 	return (aux);
 }
 
@@ -44,12 +55,13 @@ int	check_command(char *command, char **envp)
 {
 	char	*path;
 	char	**args;
-
+	int i = 0;
 	args = ft_split(command, ' ');
 	if (args == NULL)
 		exit (errno);
 	else if (ft_count_string(args) == 1)
 		args = ft_add_null(args);
+	envp = ft_add_null(envp);
 	path = ft_strjoin("/bin/", args[0]);
 	if (access(path, X_OK) < 0)
 	{
@@ -57,6 +69,12 @@ int	check_command(char *command, char **envp)
 		perror("access");
 		exit (errno);
 	}
+	//printf("conteo: %s\n",path);
+	/*while (i < ft_count_string(args))
+	{
+		printf("%d: %s\n", i , args[i]);
+		i++;
+	}*/
 	if (execve(path, args, envp) == -1)
 	{
 		perror("execve");
