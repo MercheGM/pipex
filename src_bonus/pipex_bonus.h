@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/19 20:49:13 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:04:33 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <sys/types.h>
-//# include <sys/stat.h>
-//# include <fcntl.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 # include <stdlib.h>
 # include <string.h>
 

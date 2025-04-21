@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/19 21:50:10 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:12:33 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int	check_command(char *command, char **envp)
 	args = ft_split(command, ' ');
 	if (args == NULL)
 		exit (errno);
-	else if (ft_count_string(args) == 1)
-		args = ft_add_null(args);
+	//else if (ft_count_string(args) == 1)
+	//	args = ft_add_null(args);
 	envp = ft_add_null(envp);
-	path = ft_strjoin("/bin/", args[0]);
+	path = ft_strjoin("/usr/bin/", args[0]);
 	if (access(path, X_OK) < 0)
 	{
 		path = ft_memfree(path);
