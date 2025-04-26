@@ -1,0 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 12:33:32 by mergarci          #+#    #+#             */
+/*   Updated: 2025/04/26 13:10:14 by mergarci         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex_bonus.h"
+
+/*Closes all file descriptors*/
+void	ft_close_all(int *fd1, int *fd2)
+{
+	close(fd1[READ]);
+	close(fd1[WRITE]);
+	close(fd2[READ]);
+	close(fd2[WRITE]);
+}
+
+/*It duplicates fd1 to fd2 and closes it. Besides, it closes fd_close*/
+void	ft_dup_close(int fd1, int fd2, int fd_close)
+{
+	dup2(fd1, fd2);
+	close(fd1);
+	close(fd_close);
+}
+
+/*Print help if the inputs are invalid*/
+void	ft_print_help(void)
+{
+	ft_printf("ERROR: Invalid inputs. Please introduce:\n");
+	ft_printf("\t./pipex_bonus infile com1 com2 ... comn outfile\n");
+	ft_printf("If you want to use HERE_DOC:\n");
+	ft_printf("\t./pipex_bonus here_doc <LIMIT> command1 command2 outfile\n");
+}
+
+/*Function counts number of strings*/
+int	ft_count_string(char **string)
+{
+	int	len;
+
+	len = 0;
+	while (string[len])
+		len++;
+	return (len);
+}

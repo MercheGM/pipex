@@ -6,22 +6,11 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/24 19:13:30 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:49:56 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-/*Function counts number of strings*/
-int	ft_count_string(char **string)
-{
-	int	len;
-
-	len = 0;
-	while (string[len])
-		len++;
-	return (len);
-}
 
 /*Function adds NULL to the end of the args pointer*/
 static char	**ft_add_null(char **args)
@@ -55,12 +44,12 @@ int	check_command(char *command, char **envp)
 {
 	char	*path;
 	char	**args;
-	int i = 0;
+	int		i;
+
+	i = 0;
 	args = ft_split(command, ' ');
 	if (args == NULL)
 		exit (errno);
-	//else if (ft_count_string(args) == 1)
-	//	args = ft_add_null(args);
 	envp = ft_add_null(envp);
 	path = ft_strjoin("/usr/bin/", args[0]);
 	if (access(path, X_OK) < 0)
@@ -69,12 +58,6 @@ int	check_command(char *command, char **envp)
 		perror("access");
 		exit (errno);
 	}
-	//printf("conteo: %s\n",path);
-	/*while (i < ft_count_string(args))
-	{
-		printf("%d: %s\n", i , args[i]);
-		i++;
-	}*/
 	if (execve(path, args, envp) == -1)
 	{
 		perror("execve");

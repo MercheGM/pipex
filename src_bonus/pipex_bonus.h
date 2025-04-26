@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/19 22:04:33 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/26 13:42:59 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_BONUS_H
 
 # include "../libft/ft_printf.h"
+# include "../libft/gnl_p/get_next_line_p.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/wait.h>
@@ -24,20 +25,22 @@
 # include <stdlib.h>
 # include <string.h>
 
-# define READ_END 0 
-# define WRITE_END 1 
-
 # define READ 0 
 # define WRITE 1 
 
 //pipes_bonus.c
-int		ft_first_child(int *fd, int *fd_next, char *command, char *infile, char **envp);
-int		ft_middle_child(int *fd_new, int *fd_old, char *command, char **envp);
-int		ft_parent(int *fd, char *command, char *outfile, char **envp);
-void	ft_print_help(void);
-int		ft_child_2(int *prev_pipe_fd, int *fd, int cont, char **argv, char **envp);
-int	ft_count_string(char **string);
+void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
+void	ft_pipeline(int infile, int outfile, char **commands, char **envp);
+int		ft_openfile(char *name_file, int open_mode);
+void	ft_heredoc(int infile, int outfile, char *limit, char **argv);
+
 //inputs_bonus.c
 int		check_command(char *command, char **envp);
+
+//utils_bonus.c
+void	ft_print_help(void);
+void	ft_dup_close(int fd1, int fd2, int fd_close);
+void	ft_close_all(int *fd1, int *fd2);
+int		ft_count_string(char **string);
 
 #endif
