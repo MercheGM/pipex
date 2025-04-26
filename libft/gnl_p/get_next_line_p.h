@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:07:18 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/24 21:36:04 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/26 13:48:10 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	*ft_calloc_gnl(size_t count, size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_memfree(char *ptr);
 char	*ft_read_gnl(int fd, t_data data, char **str_aux, ssize_t read_bytes);
-char	*ft_gnl_p(int fd, char *limit);
+char	*ft_gnl(int fd);
 
 //GNL_UTILS
 char	*ft_strdup(const char *s1);

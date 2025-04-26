@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:06:24 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/24 21:36:19 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/26 13:47:57 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*ft_read_gnl(int fd, t_data data, char **str_aux, ssize_t read_bytes)
 	return (data.str_out);
 }
 
-char	*ft_gnl_p(int fd, char *limit)
+char	*ft_gnl(int fd)
 {
 	static char	*str_aux;
 	t_data		data;
