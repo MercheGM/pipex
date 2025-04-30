@@ -6,13 +6,13 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:06:53 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/24 21:30:54 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:10:50 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_p.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup_gnl(const char *s1)
 {
 	char	*ptr;
 	size_t	len;
@@ -21,7 +21,7 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	if (!s1)
 		return (NULL);
-	len = ft_strlen(s1);
+	len = ft_strlen_gnl(s1);
 	ptr = (char *)ft_calloc_gnl(len + 1, sizeof(char));
 	if (ptr == NULL)
 		return (NULL);
@@ -34,13 +34,13 @@ char	*ft_strdup(const char *s1)
 	return (ptr);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+size_t	ft_strlcpy_gnl(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
 
 	i = 0;
 	if (dstsize == 0)
-		return (ft_strlen(src));
+		return (ft_strlen_gnl(src));
 	else
 	{
 		while (src[i] != '\0' && i < dstsize - 1)
@@ -49,13 +49,13 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 			i++;
 		}
 		dst[i] = '\0';
-		if (i < ft_strlen(src))
-			return (ft_strlen(src));
+		if (i < ft_strlen_gnl(src))
+			return (ft_strlen_gnl(src));
 	}
 	return (i);
 }
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen_gnl(const char *s)
 {
 	size_t	cont;
 
@@ -72,11 +72,11 @@ char	*ft_substr(char const *s, unsigned int star, size_t len)
 
 	if (!s)
 		return (NULL);
-	len_src = (unsigned int)ft_strlen(s);
+	len_src = (unsigned int)ft_strlen_gnl(s);
 	if (len > len_src)
 		len = len_src - star;
 	if (len_src < star || len_src == 0)
-		return (ft_strdup(""));
+		return (ft_strdup_gnl(""));
 	if (star + len == len_src + 1)
 		len--;
 	ptr = (char *)ft_calloc_gnl(len + 1, sizeof(char));
@@ -86,7 +86,7 @@ char	*ft_substr(char const *s, unsigned int star, size_t len)
 	{
 		while (star--)
 			s++;
-		ft_strlcpy(ptr, s, len + 1);
+		ft_strlcpy_gnl(ptr, s, len + 1);
 		return (ptr);
 	}
 	return (ptr);
@@ -102,17 +102,17 @@ bool	ft_strchr_gnl(char **s, char **dst, int c)
 	while (ptr_aux[cont] != '\0' && ptr_aux[cont] != (unsigned char)c)
 		cont++;
 	if (*dst != NULL)
-		*dst = ft_memfree(*dst);
+		*dst = ft_memfree_gnl(*dst);
 	if (ptr_aux[cont] == '\0')
 	{
-		*dst = ft_strdup("");
+		*dst = ft_strdup_gnl("");
 		return (false);
 	}
 	else
 	{
 		*s = ft_substr(*s, 0, ++cont);
-		*dst = ft_strdup(&ptr_aux[cont]);
-		ptr_aux = ft_memfree(ptr_aux);
+		*dst = ft_strdup_gnl(&ptr_aux[cont]);
+		ptr_aux = ft_memfree_gnl(ptr_aux);
 	}
 	return (true);
 }
