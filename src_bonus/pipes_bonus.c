@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/30 19:58:05 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:51:46 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	ft_pipeline(int *files, char **commands, char **envp)
 	prev_pipe[READ] = files[IN];
 	prev_pipe[WRITE] = files[OUT];
 	i = 1;
-	printf("%s %s %s %s\n", commands[0], commands[1], commands[2], commands[3]);
 	while (++i <= ft_count_string(commands) - 2)
 	{
 		if (i < ft_count_string(commands) - 2)
@@ -80,9 +79,50 @@ void	ft_heredoc(int *files, char *limit, char **argv)
 {
 	char *line;
 	bool end;
+	int *fd;
+	int pid;
+	int status;
 	
 	end = false;
-	while (!end)
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		exit(errno);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		close(fd[READ]);
+		while (!end)
+		{
+			ft_printf("> ");
+			line = ft_gnl(STDIN_FILENO);
+			//ft_printf("(%d)",ft_strncmp(line, limit, ft_strlen(limit)));
+			if (ft_strncmp(line, limit, ft_strlen(limit)) == 0)
+			{
+				//printf("> %s", line);
+				end = true;
+			}
+			//else
+			//{
+			//write(fd[WRITE], line, ft_strlen(line));
+			//ft_putstr_fd(line, STDOUT_FILENO);	
+			ft_putstr_fd(line, fd[WRITE]);	
+			//}
+			ft_memfree(line);
+		}
+	}
+	else
+	{
+		//ft_dup_close(fd[READ], files[IN], -1);
+		waitpid(pid, &status, 0);
+		//files[IN]
+		dup2(fd[READ], files[IN]);
+
+	}
+	
+	
+	/*while (!end)
 	{
 		ft_printf("> ");
 		line = ft_gnl(STDIN_FILENO);
@@ -102,4 +142,5 @@ void	ft_heredoc(int *files, char *limit, char **argv)
 	close(files[IN]);
 	files[IN] = ft_openfile("tmp.txt", O_RDONLY);
 	//ft_memfree(line);
+	*/
 }
