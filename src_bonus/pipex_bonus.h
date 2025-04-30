@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/26 13:42:59 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:26:36 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@
 # define READ 0 
 # define WRITE 1 
 
+# define IN 0
+# define OUT 1
+
 //pipes_bonus.c
 void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
-void	ft_pipeline(int infile, int outfile, char **commands, char **envp);
+void	ft_pipeline(int *files, char **commands, char **envp);
 int		ft_openfile(char *name_file, int open_mode);
-void	ft_heredoc(int infile, int outfile, char *limit, char **argv);
+void	ft_heredoc(int *files, char *limit, char **argv);
 
 //inputs_bonus.c
 int		check_command(char *command, char **envp);
