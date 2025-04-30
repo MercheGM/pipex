@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:06:24 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/30 19:10:20 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:22:03 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_strjoin_gnl(char const *s1, char const *s2)
 	return (ptr);
 }
 
-char	*ft_memfree(char *ptr)
+char	*ft_memfree_gnl(char *ptr)
 {
 	free(ptr);
 	return (NULL);

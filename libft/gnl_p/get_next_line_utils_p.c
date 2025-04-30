@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:06:53 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/30 19:10:50 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:20:17 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ size_t	ft_strlen_gnl(const char *s)
 	return (cont);
 }
 
-char	*ft_substr(char const *s, unsigned int star, size_t len)
+char	*ft_substr_gnl(char const *s, unsigned int star, size_t len)
 {
 	char			*ptr;
 	unsigned int	len_src;
@@ -110,7 +110,7 @@ bool	ft_strchr_gnl(char **s, char **dst, int c)
 	}
 	else
 	{
-		*s = ft_substr(*s, 0, ++cont);
+		*s = ft_substr_gnl(*s, 0, ++cont);
 		*dst = ft_strdup_gnl(&ptr_aux[cont]);
 		ptr_aux = ft_memfree_gnl(ptr_aux);
 	}

@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:07:18 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/30 19:09:39 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:21:03 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <stdbool.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 42
 # endif
 
 typedef struct data
@@ -41,7 +41,7 @@ char	*ft_gnl(int fd);
 char	*ft_strdup_gnl(const char *s1);
 size_t	ft_strlcpy_gnl(char *dst, const char *src, size_t dstsize);
 size_t	ft_strlen_gnl(const char *s);
-char	*ft_substr(char const *s, unsigned int star, size_t len);
+char	*ft_substr_gnl(char const *s, unsigned int star, size_t len);
 bool	ft_strchr_gnl(char **s, char **dst, int c);
 
 #endif
