@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/30 20:50:21 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:17:16 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,20 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	int	file[2];
-	char buf[100];
 
 	if (argc >= 5)
 	{
 		if (argc == 6 && !ft_strncmp(argv[1], "here_doc", 8))
 		{
-			file[IN] = ft_openfile("tmp.txt", O_CREAT | O_WRONLY | O_TRUNC);
-			file[OUT] = ft_openfile(argv[argc - 1], O_CREAT | O_WRONLY | O_APPEND);
-			ft_heredoc(file, argv[2], argv);
-			read(file[IN], buf, 100);
-			printf("bytes: %d\nbuf: %s*****\n", read(file[IN], buf, 10), buf);
+			file[I] = -1;
+			file[O] = ft_openf(argv[argc - 1], O_CREAT | O_WRONLY | O_APPEND);
+			ft_heredoc(file, argv[2]);
 			argv++;
 		}
 		else
 		{
-			file[IN] = ft_openfile(argv[1], O_RDONLY);
-			file[OUT] = ft_openfile(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC);
-			//ft_pipeline(file[IN], file[OUT], argv, envp);
+			file[I] = ft_openf(argv[1], O_RDONLY);
+			file[O] = ft_openf(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC);
 		}
 		ft_pipeline(file, argv, envp);
 	}

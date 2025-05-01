@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/26 12:49:56 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:25:28 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,7 @@ int	check_command(char *command, char **envp)
 {
 	char	*path;
 	char	**args;
-	int		i;
 
-	i = 0;
 	args = ft_split(command, ' ');
 	if (args == NULL)
 		exit (errno);
@@ -56,7 +54,7 @@ int	check_command(char *command, char **envp)
 	{
 		path = ft_memfree(path);
 		perror("access");
-		exit (errno);
+		exit(errno);
 	}
 	if (execve(path, args, envp) == -1)
 	{
@@ -64,4 +62,14 @@ int	check_command(char *command, char **envp)
 		exit(errno);
 	}
 	return (errno);
+}
+
+/*Only to be used at parent process. It closes fd[WRITE], copies
+ fd[READ] to the previous fd and waits to the PID child process
+ to be finished*/
+void	ft_parent(int *fd, int *fd_saved, int pid, int *status)
+{
+	close(fd[WRITE]);
+	fd_saved[0] = fd[READ];
+	waitpid(pid, status, 0);
 }

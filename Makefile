@@ -1,6 +1,6 @@
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror -I$(PATH_SRC) -g3 -fsanitize=address
-CFLAGS_B      =  -I$(PATH_SRC_B) -g3 -fsanitize=address
+CFLAGS_B    =  -Wall -Wextra -Werror -I$(PATH_SRC_B) -g3 -fsanitize=address
 #-Wall -Wextra -Werror -g3 -fsanitize=address
 
 RM          = @rm -f

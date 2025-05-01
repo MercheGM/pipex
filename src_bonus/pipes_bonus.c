@@ -6,12 +6,14 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/30 20:51:46 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:57:02 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
+/*Function to duplicate file descriptors depending on the number
+of the proccess. This function duplicates and closes fd*/
 void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
 {
 	int	num_commands;
@@ -27,6 +29,7 @@ void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
 		ft_dup_close(prev_pipe[1], STDOUT_FILENO, fd[WRITE]);
 }
 
+/*It manange the pipelines and execute the commands */
 void	ft_pipeline(int *files, char **commands, char **envp)
 {
 	int	i;
@@ -35,13 +38,14 @@ void	ft_pipeline(int *files, char **commands, char **envp)
 	int	pid;
 	int	prev_pipe[2];
 
-	prev_pipe[READ] = files[IN];
-	prev_pipe[WRITE] = files[OUT];
+	prev_pipe[READ] = files[I];
+	prev_pipe[WRITE] = files[O];
 	i = 1;
+	status = 0;
 	while (++i <= ft_count_string(commands) - 2)
 	{
 		if (i < ft_count_string(commands) - 2)
-			pipe(fd);
+			ft_create_fd(fd);
 		pid = fork();
 		if (pid == 0)
 		{
@@ -49,17 +53,14 @@ void	ft_pipeline(int *files, char **commands, char **envp)
 			check_command(commands[i], envp);
 		}
 		else
-		{
-			close(fd[WRITE]);
-			prev_pipe[0] = fd[READ];
-			waitpid(pid, &status, 0);
-		}
+			ft_parent(fd, prev_pipe, pid, &status);
 	}
 	ft_close_all(fd, prev_pipe);
-	exit(EXIT_SUCCESS);
 }
 
-int	ft_openfile(char *name_file, int open_mode)
+/*Functions to open files depending of the mode. Besides,
+it checks if the file has been opened properly*/
+int	ft_openf(char *name_file, int open_mode)
 {
 	int	fd;
 
@@ -75,72 +76,42 @@ int	ft_openfile(char *name_file, int open_mode)
 	return (fd);
 }
 
-void	ft_heredoc(int *files, char *limit, char **argv)
+/*Function that reads the STDIN input. It will check if the
+new line is the limit or not in order to exit the loop*/
+void	ft_read_heredoc(int fd, char *limit)
 {
-	char *line;
-	bool end;
-	int *fd;
-	int pid;
-	int status;
-	
-	end = false;
-	if (pipe(fd) == -1)
+	char	*line;
+
+	while (1)
 	{
-		perror("pipe");
-		exit(errno);
+		ft_printf("> ");
+		line = ft_gnl(STDIN_FILENO);
+		if (ft_strncmp(line, limit, ft_strlen(limit)) == 0)
+			break ;
+		ft_putstr_fd(line, fd);
+		ft_memfree(line);
 	}
+	ft_memfree(line);
+}
+
+/*It creates a new process to read SDTIN input and saves it 
+in the file descriptor input*/
+void	ft_heredoc(int *files, char *limit)
+{
+	int	fd[2];
+	int	pid;
+	int	status;
+
+	status = 0;
+	ft_create_fd(fd);
 	pid = fork();
 	if (pid == 0)
 	{
 		close(fd[READ]);
-		while (!end)
-		{
-			ft_printf("> ");
-			line = ft_gnl(STDIN_FILENO);
-			//ft_printf("(%d)",ft_strncmp(line, limit, ft_strlen(limit)));
-			if (ft_strncmp(line, limit, ft_strlen(limit)) == 0)
-			{
-				//printf("> %s", line);
-				end = true;
-			}
-			//else
-			//{
-			//write(fd[WRITE], line, ft_strlen(line));
-			//ft_putstr_fd(line, STDOUT_FILENO);	
-			ft_putstr_fd(line, fd[WRITE]);	
-			//}
-			ft_memfree(line);
-		}
+		ft_read_heredoc(fd[WRITE], limit);
+		close(fd[WRITE]);
+		exit(errno);
 	}
 	else
-	{
-		//ft_dup_close(fd[READ], files[IN], -1);
-		waitpid(pid, &status, 0);
-		//files[IN]
-		dup2(fd[READ], files[IN]);
-
-	}
-	
-	
-	/*while (!end)
-	{
-		ft_printf("> ");
-		line = ft_gnl(STDIN_FILENO);
-		//ft_printf("(%d)",ft_strncmp(line, limit, ft_strlen(limit)));
-		if (ft_strncmp(line, limit, ft_strlen(limit)) == 0)
-		{
-			//printf("> %s", line);
-			end = true;
-		}
-		else
-		{
-			write(files[IN], line, ft_strlen(line));
-			
-		}
-		ft_memfree(line);
-	}
-	close(files[IN]);
-	files[IN] = ft_openfile("tmp.txt", O_RDONLY);
-	//ft_memfree(line);
-	*/
+		ft_parent(fd, files, pid, &status);
 }
