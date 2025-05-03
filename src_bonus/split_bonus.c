@@ -6,12 +6,14 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:14:28 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/03 13:17:57 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:35:45 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
+/*It counts number of arguements depending on the space and quote
+characters*/
 static int	ft_count_arg(char *str)
 {
 	int		cont;
@@ -34,6 +36,7 @@ static int	ft_count_arg(char *str)
 	return (cont);
 }
 
+/*It allocates the memory and save the word*/
 static char	*ft_save_word(int len, int init, char **str)
 {
 	char	*str_aux;
@@ -46,6 +49,7 @@ static char	*ft_save_word(int len, int init, char **str)
 	return (str_aux);
 }
 
+/*It gets the next word of the input string*/
 static char	*ft_get_word(char **str)
 {
 	int		end;
@@ -73,6 +77,8 @@ static char	*ft_get_word(char **str)
 	return (ft_save_word(end - init, init, str));
 }
 
+/*Function that splits a string depending the spaces. It takes care that if 
+there are quotes, not to split depending on the spaces.*/
 char	**ft_split_bash(char *str)
 {
 	char	**result;
