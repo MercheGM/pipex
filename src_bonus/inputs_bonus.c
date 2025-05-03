@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/01 12:25:28 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:24:49 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_command(char *command, char **envp)
 	char	*path;
 	char	**args;
 
-	args = ft_split(command, ' ');
+	args = ft_split_bash(command);
 	if (args == NULL)
 		exit (errno);
 	envp = ft_add_null(envp);

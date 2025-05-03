@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/01 12:23:43 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:18:55 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 # define I 0
 # define O 1
 
+//main_bonus.c
+//main function
+
 //pipes_bonus.c
 void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
 void	ft_pipeline(int *files, char **commands, char **envp);
@@ -47,5 +50,8 @@ void	ft_dup_close(int fd1, int fd2, int fd_close);
 void	ft_close_all(int *fd1, int *fd2);
 int		ft_count_string(char **string);
 void	ft_create_fd(int *fd);
+
+//split_bonus.c
+char	**ft_split_bash(char *str);
 
 #endif
