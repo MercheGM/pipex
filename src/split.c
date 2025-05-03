@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:14:28 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/03 13:35:11 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/03 17:52:55 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,20 @@ static int	ft_count_arg(char *str)
 	i = 0;
 	quote_found = false;
 	cont = 1;
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
 	while (str[i])
 	{
 		if (str[i] == '\'' && !quote_found)
 			quote_found = true;
 		else if (str[i] == '\'' && quote_found)
 			quote_found = false;
-		if (str[i] == ' ' && !quote_found)
+		if (str[i] == ' ' && (str[i - 1] != ' ') && !quote_found)
 			cont++;
 		i++;
 	}
+	if (str[i] == '\0' && str[i - 1] == ' ')
+		cont--;
 	return (cont);
 }
 
