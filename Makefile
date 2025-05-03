@@ -26,7 +26,8 @@ INC	=	$(PATH_SRC)$(NAME_INC)
 INCB=	$(PATH_SRC_B)$(NAME_INC_B)
 SRC	=	$(PATH_SRC)main.c \
 		$(PATH_SRC)inputs.c \
-		$(PATH_SRC)pipes.c 
+		$(PATH_SRC)pipes.c \
+		$(PATH_SRC)split.c
 SRC_BONUS	=	$(PATH_SRC_B)main_bonus.c \
 			$(PATH_SRC_B)inputs_bonus.c \
 			$(PATH_SRC_B)pipes_bonus.c \
