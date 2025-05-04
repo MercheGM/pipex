@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 14:53:29 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/04 19:26:51 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,18 @@ void	ft_read_heredoc(int fd, char *limit)
 	while (1)
 	{
 		ft_printf("> ");
-		line = ft_gnl(STDIN_FILENO);
-		if (ft_strncmp(line, newlimit, ft_strlen(newlimit) + 1) == 0)
+		line = ft_gnl(STDIN_FILENO, newlimit);
+		if (!line)
 			break ;
+		if (ft_strncmp(line, newlimit, ft_strlen(newlimit) + 1) == 0)
+		{
+			line = ft_memfree(line);
+			break ;
+		}
 		ft_putstr_fd(line, fd);
-		ft_memfree(line);
+		line = ft_memfree(line);
 	}
-	ft_memfree(newlimit);
-	ft_memfree(line);
+	newlimit = ft_memfree(newlimit);
 }
 
 /*It creates a new process to read SDTIN input and saves it 

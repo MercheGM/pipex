@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:14:28 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 18:13:24 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/04 18:33:16 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,12 @@ static char	*ft_save_word(int len, int init, char **str)
 {
 	char	*str_aux;
 
-	str_aux = (char *)ft_calloc(len, sizeof(char));
+	str_aux = (char *)ft_calloc(len + 1, sizeof(char));
 	while (init--)
 		(*str)++;
 	while (++init < len)
 		str_aux[init] = (*str)[init];
+	str_aux[init] = '\0';
 	return (str_aux);
 }
 

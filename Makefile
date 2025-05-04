@@ -7,7 +7,7 @@ RM          = @rm -f
 
 PATH_LIBFT  = libft/
 PATH_GNL_P  = libft/gnl_p/
-PATH_SRC    = src1/
+PATH_SRC    = src/
 PATH_SRC_B	= src_bonus/
 PATH_OBJ    = obj/
 PATH_OBJ_B    = obj_bonus/
