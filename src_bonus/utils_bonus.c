@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 12:33:32 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/03 13:15:27 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/04 14:39:02 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	ft_print_help(void)
 	ft_printf("\t./pipex_bonus infile com1 com2 ... comn outfile\n");
 	ft_printf("If you want to use HERE_DOC:\n");
 	ft_printf("\t./pipex_bonus here_doc <LIMIT> command1 command2 outfile\n");
+	exit (EXIT_FAILURE);
 }
 
 /*Function counts number of strings*/
