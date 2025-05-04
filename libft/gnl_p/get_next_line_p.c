@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_p.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:06:24 by mergarci          #+#    #+#             */
-/*   Updated: 2025/04/30 19:22:03 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/04 19:18:26 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*ft_read_gnl(int fd, t_data data, char **str_aux, ssize_t read_bytes)
 	return (data.str_out);
 }
 
-char	*ft_gnl(int fd)
+char	*ft_gnl(int fd, char *limit)
 {
 	static char	*str_aux;
 	t_data		data;
@@ -107,5 +107,10 @@ char	*ft_gnl(int fd)
 		data.found_n = ft_strchr_gnl(&data.str_out, &str_aux, '\n');
 	}
 	data.str_out = ft_read_gnl(fd, data, &str_aux, read_bytes);
+	if (ft_strncmp(data.str_out, limit, ft_strlen_gnl(limit) + 1) == 0)
+	{
+		data.str_out = ft_memfree_gnl(data.str_out);
+		str_aux = ft_memfree_gnl(str_aux);
+	}
 	return (data.str_out);
 }
