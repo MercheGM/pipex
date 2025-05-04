@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 14:49:27 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/04 14:53:29 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	ft_read_heredoc(int fd, char *limit)
 	{
 		ft_printf("> ");
 		line = ft_gnl(STDIN_FILENO);
-	if (ft_strncmp(line, newlimit, ft_strlen(newlimit) + 1) == 0)
+		if (ft_strncmp(line, newlimit, ft_strlen(newlimit) + 1) == 0)
 			break ;
 		ft_putstr_fd(line, fd);
 		ft_memfree(line);
