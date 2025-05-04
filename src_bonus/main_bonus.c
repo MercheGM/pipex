@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 14:40:02 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/04 14:57:53 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_heredoc(file, argv[2]);
 			argv++;
 		}
-		else if (argc == 6 && !ft_strncmp(argv[1], "here_doc", 8))
+		else if (argc == 6 && !ft_strncmp(argv[1], "here_doc", 1))
 			ft_print_help();
 		else
 		{
