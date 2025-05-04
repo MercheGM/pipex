@@ -7,7 +7,7 @@ RM          = @rm -f
 
 PATH_LIBFT  = libft/
 PATH_GNL_P  = libft/gnl_p/
-PATH_SRC    = src/
+PATH_SRC    = src1/
 PATH_SRC_B	= src_bonus/
 PATH_OBJ    = obj/
 PATH_OBJ_B    = obj_bonus/
@@ -27,7 +27,8 @@ INCB=	$(PATH_SRC_B)$(NAME_INC_B)
 SRC	=	$(PATH_SRC)main.c \
 		$(PATH_SRC)inputs.c \
 		$(PATH_SRC)pipes.c \
-		$(PATH_SRC)split.c
+		$(PATH_SRC)split.c \
+		$(PATH_SRC)utils.c 
 SRC_BONUS	=	$(PATH_SRC_B)main_bonus.c \
 			$(PATH_SRC_B)inputs_bonus.c \
 			$(PATH_SRC_B)pipes_bonus.c \
