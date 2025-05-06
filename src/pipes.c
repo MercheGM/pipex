@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 20:34:00 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:46:36 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,23 @@ void	ft_pipeline(int *files, char **commands, char **envp)
 	prev_pipe[WRITE] = files[O];
 	i = 1;
 	status = 0;
-	while (++i <= ft_count_string(commands) - 2)
+	while ((++i <= ft_count_string(commands) - 2) && status == 0)
 	{
 		ft_create_fd(fd);
 		pid = fork();
 		if (pid == 0)
 		{
 			ft_redirect_fd(prev_pipe, commands, fd, i);
-			check_command(commands[i], envp);
+			status = check_command(commands[i], envp);
+			if (status != 0)
+				ft_printf("__%d__\n", status);
 		}
 		else
-			ft_parent(fd, prev_pipe);
+			ft_parent(fd, prev_pipe, &status);
 	}
 	wait(NULL);
 	wait(NULL);
+	(void)status;
 	ft_close_all(fd, prev_pipe);
 }
 

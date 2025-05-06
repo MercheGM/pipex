@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   inputs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 20:08:52 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:43:01 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+static char	**ft_free_str(char **str)
+{
+	int	n;
+
+	n = ft_count_string(str);
+	while (n >= 0)
+	{
+		str[n] = ft_memfree(str[n]);
+		n--;
+	}
+	free(str);
+	return (NULL);
+}
 
 /*Function adds NULL to the end of the args pointer*/
 static char	**ft_add_null(char **args)
@@ -53,21 +67,28 @@ int	check_command(char *command, char **envp)
 	if (access(path, X_OK) < 0)
 	{
 		path = ft_memfree(path);
+		args = ft_free_str(args);
+		envp = ft_free_str(envp);
 		perror("access");
-		exit(errno);
+		return(errno);
 	}
 	if (execve(path, args, envp) == -1)
 	{
+		path = ft_memfree(path);
+		args = ft_free_str(args);
+		envp = ft_free_str(envp);
 		perror("execve");
-		exit(errno);
+		return(errno);
 	}
 	return (errno);
 }
 
 /*Only to be used at parent process. It closes fd[WRITE], copies
  fd[READ] to the previous fd*/
-void	ft_parent(int *fd, int *fd_saved)
+void	ft_parent(int *fd, int *fd_saved, int *status)
 {
 	close(fd[WRITE]);
 	fd_saved[0] = fd[READ];
+	//wait(status);
+	(void)status;
 }
