@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_p.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:07:18 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 20:49:25 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:44:01 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	*ft_calloc_gnl(size_t count, size_t size);
 char	*ft_strjoin_gnl(char const *s1, char const *s2);
 char	*ft_memfree_gnl(char *ptr);
 char	*ft_read_gnl(int fd, t_data data, char **str_aux, ssize_t read_bytes);
-//char	*ft_gnl(int fd, char *limit);
-char	*ft_gnl(int fd);
+char	*ft_gnl(int fd, char *limit);
+//char	*ft_gnl(int fd);
 
 //GNL_UTILS
 char	*ft_strdup_gnl(const char *s1);

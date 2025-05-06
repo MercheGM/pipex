@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_p.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:06:24 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 20:48:58 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:09:48 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ char	*ft_read_gnl(int fd, t_data data, char **str_aux, ssize_t read_bytes)
 	}
 	return (data.str_out);
 }
-char	*ft_gnl(int fd)
-//char	*ft_gnl(int fd, char *limit)
+
+char	*ft_gnl(int fd, char *limit)
 {
 	static char	*str_aux;
 	t_data		data;
@@ -94,6 +94,11 @@ char	*ft_gnl(int fd)
 
 	data.found_n = false;
 	read_bytes = 1;
+	if (fd == -10 && limit == NULL)
+	{
+		str_aux = ft_memfree_gnl(str_aux);
+		return (NULL);
+	}
 	if (fd == -1 || BUFFER_SIZE == 0)
 		return (NULL);
 	data.str_out = ft_calloc_gnl(BUFFER_SIZE + 1, sizeof(char));
@@ -107,10 +112,5 @@ char	*ft_gnl(int fd)
 		data.found_n = ft_strchr_gnl(&data.str_out, &str_aux, '\n');
 	}
 	data.str_out = ft_read_gnl(fd, data, &str_aux, read_bytes);
-	/*if (ft_strncmp(data.str_out, limit, ft_strlen_gnl(limit) + 1) == 0)
-	{
-		data.str_out = ft_memfree_gnl(data.str_out);
-		str_aux = ft_memfree_gnl(str_aux);
-	}*/
 	return (data.str_out);
 }

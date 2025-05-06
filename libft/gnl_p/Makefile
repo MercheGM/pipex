@@ -7,9 +7,7 @@ RM = @rm -f
 
 NAME = libgnl_p.a
 SRC = 	get_next_line_p.c \
-		get_next_line_utils_p.c \
-		get_next_line_utils_2.c   
-
+		get_next_line_utils_p.c
 OBJ = $(SRC:.c=.o)
 
 all : $(NAME)
