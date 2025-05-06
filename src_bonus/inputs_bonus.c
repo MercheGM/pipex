@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/06 20:42:18 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:46:09 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,5 @@ int	check_command(char *command, char **envp)
 void	ft_parent(int *fd, int *fd_saved)
 {
 	close(fd[WRITE]);
-	fd_saved[0] = fd[READ];
+	fd_saved[READ] = fd[READ];
 }
