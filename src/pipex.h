@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/06 19:40:06 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:43:18 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@
 void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
 void	ft_pipeline(int *files, char **commands, char **envp);
 int		ft_openf(char *name_file, int open_mode);
-//void	ft_heredoc(int *files, char *limit);
-void	ft_parent(int *fd, int *fd_saved, int *status);
-// void	ft_parent(int *fd, int *fd_saved, int pid, int *status);
+void	ft_parent(int *fd, int *fd_saved);
 
 //inputs_bonus.c
 int		check_command(char *command, char **envp);

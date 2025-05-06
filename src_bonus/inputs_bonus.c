@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/06 19:07:49 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 20:42:18 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,8 @@ int	check_command(char *command, char **envp)
 
 /*Only to be used at parent process. It closes fd[WRITE], copies
  fd[READ] to the previous fd*/
-void	ft_parent(int *fd, int *fd_saved, int *status)
+void	ft_parent(int *fd, int *fd_saved)
 {
 	close(fd[WRITE]);
 	fd_saved[0] = fd[READ];
-	wait(status);
 }
