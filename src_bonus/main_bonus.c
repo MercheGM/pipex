@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 21:04:25 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:26:30 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,37 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_heredoc(file, argv[2]);
 			argv++;
 		}
-		else if (argc ==6 && !ft_strncmp(argv[1], "here_doc", 1))
+		else if (argc == 6 && !ft_strncmp(argv[1], "here_doc", 1))
 			ft_print_help();
 		else
+		{
+			file[I] = ft_openf(argv[1], O_RDONLY);
+			file[O] = ft_openf(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC);
+		}
+		if (file[I] != -1 && file[O] != -1)
+			ft_pipeline(file, argv, envp);
+	}
+	else
+		ft_print_help();
+	return (EXIT_SUCCESS);
+}
+
+/*int	main(int argc, char *argv[], char *envp[])
+{
+	int	file[2];
+
+	if (!ft_strncmp(argv[1], "here_doc", 9))
+	{
+		if (argc == 6 && !ft_strncmp(argv[1], "here_doc", 9))
+		{
+			file[I] = -1;
+			file[O] = ft_openf(argv[argc - 1], O_CREAT | O_WRONLY | O_APPEND);
+			ft_heredoc(file, argv[2]);
+			argv++;
+		}
+		else if (argc == 6 && !ft_strncmp(argv[1], "here_doc", 1))
+			ft_print_help();
+		else if 
 		{
 			file[I] = ft_openf(argv[1], O_RDONLY);
 			file[O] = ft_openf(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC);
@@ -35,6 +63,9 @@ int	main(int argc, char *argv[], char *envp[])
 		ft_pipeline(file, argv, envp);
 	}
 	else
+	{
+		
+	}
 		ft_print_help();
 	return (EXIT_SUCCESS);
-}
+}*/

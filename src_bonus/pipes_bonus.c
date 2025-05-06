@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 20:56:25 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:21:51 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,18 @@ void	ft_pipeline(int *files, char **commands, char **envp)
 	prev_pipe[WRITE] = files[O];
 	i = 1;
 	status = 0;
-	while (++i <= ft_count_string(commands) - 2)
+	while ((++i <= ft_count_string(commands) - 2) && status == 0)
 	{
 		ft_create_fd(fd);
 		pid = fork();
 		if (pid == 0)
 		{
 			ft_redirect_fd(prev_pipe, commands, fd, i);
-			check_command(commands[i], envp);
+			status = check_command(commands[i], envp);
 		}
 		else
-			ft_parent(fd, prev_pipe);
+			ft_parent(fd, prev_pipe, &status);
 	}
-	wait(NULL);
-	wait(NULL);
 	ft_close_all(fd, prev_pipe);
 }
 
@@ -69,11 +67,6 @@ int	ft_openf(char *name_file, int open_mode)
 		fd = open(name_file, open_mode);
 	else
 		fd = open(name_file, open_mode, 0644);
-	if (fd == -1)
-	{
-		perror("outfile");
-		exit(errno);
-	}
 	return (fd);
 }
 
@@ -88,8 +81,7 @@ void	ft_read_heredoc(int fd, char *limit)
 	while (1)
 	{
 		ft_printf("> ");
-		//line = ft_gnl(STDIN_FILENO, newlimit);
-		line = ft_gnl(STDIN_FILENO);
+		line = ft_gnl(STDIN_FILENO, newlimit);
 		if (!line)
 			break ;
 		if (ft_strncmp(line, newlimit, ft_strlen(newlimit) + 1) == 0)
@@ -100,6 +92,7 @@ void	ft_read_heredoc(int fd, char *limit)
 		ft_putstr_fd(line, fd);
 		line = ft_memfree(line);
 	}
+	ft_gnl(-10, NULL);
 	newlimit = ft_memfree(newlimit);
 }
 
@@ -122,8 +115,5 @@ void	ft_heredoc(int *files, char *limit)
 		exit(errno);
 	}
 	else
-	{
-		ft_parent(fd, files);
-		waitpid(pid, &status, 0);
-	}
+		ft_parent(fd, files, &status);
 }
