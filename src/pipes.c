@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/06 20:47:04 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:06:51 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,19 @@ void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
 }
 
 /*It manange the pipelines and execute the commands */
-void	ft_pipeline(int *files, char **commands, char **envp)
+int	ft_pipeline(int *files, char **commands, char **envp, int *status)
 {
 	int	i;
 	int	fd[2];
 	int	pid;
 	int	prev_pipe[2];
-
+//	int status;
+	
 	prev_pipe[READ] = files[I];
 	prev_pipe[WRITE] = files[O];
+//	status = 0;
 	i = 1;
-	while ((++i <= ft_count_string(commands) - 2))
+	while ((++i <= ft_count_string(commands) - 2) /*&& prev_pipe[READ] != -1*/) //cuidado!!! con esto saltan leaks!!
 	{
 		ft_create_fd(fd);
 		pid = fork();
@@ -54,8 +56,9 @@ void	ft_pipeline(int *files, char **commands, char **envp)
 			ft_parent(fd, prev_pipe);
 	}
 	while (i-- >= 0)
-		wait(NULL);
+		wait(status);
 	ft_close_all(fd, prev_pipe);
+	return (*status);
 }
 
 /*Functions to open files depending of the mode. Besides,
@@ -70,8 +73,8 @@ int	ft_openf(char *name_file, int open_mode)
 		fd = open(name_file, open_mode, 0644);
 	if (fd == -1)
 	{
-		perror("outfile");
-		exit(errno);
+		perror(name_file);
+		//exit(errno);
 	}
 	return (fd);
 }

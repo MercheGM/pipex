@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inputs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/06 20:45:46 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:17:53 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	check_command(char *command, char **envp)
 		args = ft_free_str(args);
 		envp = ft_free_str(envp);
 		perror("access");
-		return (errno);
+		return (EXIT_FAILURE);
 	}
 	if (execve(path, args, envp) == -1)
 	{
@@ -78,9 +78,9 @@ int	check_command(char *command, char **envp)
 		args = ft_free_str(args);
 		envp = ft_free_str(envp);
 		perror("execve");
-		return (errno);
+		return (EXIT_FAILURE);
 	}
-	return (errno);
+	return (EXIT_SUCCESS);
 }
 
 /*Only to be used at parent process. It closes fd[WRITE], copies
