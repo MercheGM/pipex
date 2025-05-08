@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/07 19:00:25 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:49:42 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int argc, char *argv[], char *envp[])
+/*int	main(int argc, char *argv[], char *envp[])
 {
 	int	file[2];
 	int status;
@@ -22,10 +22,18 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		file[I] = ft_openf(argv[1], O_RDONLY);
 		file[O] = ft_openf(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC);
-		status = ft_pipeline(file, argv, envp, &status);
-		ft_printf("----%d-----", status);
+		status = ft_pipeline(file, argv, envp);
+		//ft_printf("----%d-----", status);
 	}
 	else
 		ft_print_help();
 	return (status);
-}
+}*/
+
+/*int	main(int argc, char *argv[], char *envp[])
+{
+	char *comando = {"wc -ldrgdf"};
+
+	check_command(comando, envp, 0);
+	return 0;
+}*/

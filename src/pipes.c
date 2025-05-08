@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/07 19:06:51 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:29:44 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*Function to duplicate file descriptors depending on the number
 of the proccess. This function duplicates and closes fd*/
-void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
+int	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
 {
 	int	num_commands;
 
@@ -22,43 +22,56 @@ void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
 	if (prev_pipe[READ] != -1)
 		ft_dup_close(prev_pipe[READ], STDIN_FILENO, fd[READ]);
 	else
-		ft_dup_close(fd[READ], STDIN_FILENO, prev_pipe[READ]);
-	if (i < num_commands - 2)
+	{
+		close(fd[READ]);
+		close(fd[WRITE]);
+		return (EXIT_FAILURE);
+		//close(prev_pipe[READ]);
+		//ft_dup_close(fd[READ], STDIN_FILENO, prev_pipe[READ]);
+	}
+	if ((i < num_commands - 2) && (prev_pipe[READ] != -1))
 		ft_dup_close(fd[WRITE], STDOUT_FILENO, prev_pipe[WRITE]);
-	else
+	else //if (prev_pipe[READ] != -1)
 		ft_dup_close(prev_pipe[WRITE], STDOUT_FILENO, fd[WRITE]);
+	return (EXIT_SUCCESS);
 }
 
 /*It manange the pipelines and execute the commands */
-int	ft_pipeline(int *files, char **commands, char **envp, int *status)
+int	ft_pipeline(int *files, char **commands, char **envp)
 {
 	int	i;
 	int	fd[2];
 	int	pid;
 	int	prev_pipe[2];
-//	int status;
-	
+	int status;
+	int status_exit;
 	prev_pipe[READ] = files[I];
 	prev_pipe[WRITE] = files[O];
-//	status = 0;
+	status = 0;
+	status_exit = 0;
 	i = 1;
-	while ((++i <= ft_count_string(commands) - 2) /*&& prev_pipe[READ] != -1*/) //cuidado!!! con esto saltan leaks!!
+	while (++i <= ft_count_string(commands) - 2)
 	{
 		ft_create_fd(fd);
 		pid = fork();
 		if (pid == 0)
 		{
-			ft_redirect_fd(prev_pipe, commands, fd, i);
-			if (check_command(commands[i], envp) != 0)
-				break ;
+			status = ft_redirect_fd(prev_pipe, commands, fd, i);
+			if (check_command(commands[i], envp, status) != 0)
+				return (EXIT_FAILURE);
 		}
 		else
 			ft_parent(fd, prev_pipe);
 	}
 	while (i-- >= 0)
-		wait(status);
+	{
+		wait(&status);
+		if (status != 0)
+		status_exit = status;
+	}
 	ft_close_all(fd, prev_pipe);
-	return (*status);
+	//return (WEXITSTATUS(status));
+	return (WEXITSTATUS(status_exit));
 }
 
 /*Functions to open files depending of the mode. Besides,

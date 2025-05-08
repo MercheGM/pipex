@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/07 18:43:34 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:57:27 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@
 //main function
 
 //pipes_bonus.c
-void	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
-int 	ft_pipeline(int *files, char **commands, char **envp, int *status);
+int		ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
+int 	ft_pipeline(int *files, char **commands, char **envp);
 int		ft_openf(char *name_file, int open_mode);
 void	ft_parent(int *fd, int *fd_saved);
 
 //inputs_bonus.c
-int		check_command(char *command, char **envp);
+int		check_command(char *command, char **envp, int status);
 
 //utils_bonus.c
 void	ft_print_help(void);
