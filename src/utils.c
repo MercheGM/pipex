@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mergarci <mergarci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 12:33:32 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/04 18:13:28 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:14:52 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_close_all(int *fd1, int *fd2)
 	close(fd1[WRITE]);
 	close(fd2[READ]);
 	close(fd2[WRITE]);
-	exit(EXIT_SUCCESS);
+	//exit(EXIT_SUCCESS);
 }
 
 /*It duplicates fd1 to fd2 and closes it. Besides, it closes fd_close*/

@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/08 18:29:44 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:36:09 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,14 @@ int	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
 	}
 	if ((i < num_commands - 2) && (prev_pipe[READ] != -1))
 		ft_dup_close(fd[WRITE], STDOUT_FILENO, prev_pipe[WRITE]);
-	else //if (prev_pipe[READ] != -1)
+	else if ((i == num_commands - 2) && (prev_pipe[WRITE] != -1))
 		ft_dup_close(prev_pipe[WRITE], STDOUT_FILENO, fd[WRITE]);
+	else if (prev_pipe[WRITE] == -1)
+	{
+		close(fd[READ]);
+		close(fd[WRITE]);
+		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -57,21 +63,23 @@ int	ft_pipeline(int *files, char **commands, char **envp)
 		if (pid == 0)
 		{
 			status = ft_redirect_fd(prev_pipe, commands, fd, i);
-			if (check_command(commands[i], envp, status) != 0)
+			//printf("____%d____\n", status);
+			if (status != 0 ||check_command(commands[i], envp, status) != 0)
 				return (EXIT_FAILURE);
 		}
 		else
 			ft_parent(fd, prev_pipe);
 	}
-	while (i-- >= 0)
+	while (--i >= 2)
 	{
+		(void)status_exit;
 		wait(&status);
-		if (status != 0)
-		status_exit = status;
+		//if (status != 0)
+		//	status_exit = status;
+		//ft_printf("i: %d, status: %d, status_exit: %d ,WEXITSTATUS: %d\n", i, status, status_exit, WEXITSTATUS(status_exit));
 	}
 	ft_close_all(fd, prev_pipe);
-	//return (WEXITSTATUS(status));
-	return (WEXITSTATUS(status_exit));
+	return (WEXITSTATUS(status));
 }
 
 /*Functions to open files depending of the mode. Besides,
@@ -85,9 +93,6 @@ int	ft_openf(char *name_file, int open_mode)
 	else
 		fd = open(name_file, open_mode, 0644);
 	if (fd == -1)
-	{
 		perror(name_file);
-		//exit(errno);
-	}
 	return (fd);
 }

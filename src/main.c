@@ -6,13 +6,13 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:13 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/08 18:49:42 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:35:32 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/*int	main(int argc, char *argv[], char *envp[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	int	file[2];
 	int status;
@@ -23,17 +23,11 @@
 		file[I] = ft_openf(argv[1], O_RDONLY);
 		file[O] = ft_openf(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC);
 		status = ft_pipeline(file, argv, envp);
-		//ft_printf("----%d-----", status);
+		if ((file[I] == -1) || (file[O] == -1))
+			status = 1;
+		//ft_printf("----%d-----\n", status);
 	}
 	else
 		ft_print_help();
 	return (status);
-}*/
-
-/*int	main(int argc, char *argv[], char *envp[])
-{
-	char *comando = {"wc -ldrgdf"};
-
-	check_command(comando, envp, 0);
-	return 0;
-}*/
+}
