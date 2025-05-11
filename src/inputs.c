@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/11 21:10:09 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:37:53 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	ft_free_strings(char **str1, char ***str2, char ***str3)
 	*str2 = ft_free_str(*str2);
 	*str3 = ft_free_str(*str3);
 }
-
 
 /*Function adds NULL to the end of the args pointer*/
 static char	**ft_add_null(char **args)
@@ -67,7 +66,7 @@ int	check_command(char *command, char **envp, int status)
 	char	*path;
 	char	**args;
 
-	args = ft_split_bash(command);	
+	args = ft_split_bash(command);
 	if (!status || (args == NULL))
 	{
 		envp = ft_add_null(envp);
@@ -78,7 +77,7 @@ int	check_command(char *command, char **envp, int status)
 			perror("access");
 			return (EXIT_FAILURE);
 		}
-		if (execve(path, args, envp)  == -1)
+		if (execve(path, args, envp) == -1)
 		{
 			ft_free_strings(&path, &args, &envp);
 			perror("execve");
@@ -96,4 +95,5 @@ void	ft_parent(int *fd, int *fd_saved)
 {
 	ft_closefd_save(fd[WRITE]);
 	fd_saved[READ] = fd[READ];
+	ft_closefd_save(fd[READ]);
 }

@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/11 21:11:21 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:40:45 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ int	ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i)
 		ft_closefd_save(fd[READ]);
 		ft_closefd_save(fd[WRITE]);
 		return (EXIT_FAILURE);
-		//close(prev_pipe[READ]);
-		//ft_dup_close(fd[READ], STDIN_FILENO, prev_pipe[READ]);
 	}
 	if ((i < num_commands - 2) && (prev_pipe[READ] != -1))
 		ft_dup_close(fd[WRITE], STDOUT_FILENO, prev_pipe[WRITE]);
@@ -49,8 +47,8 @@ int	ft_pipeline(int *files, char **commands, char **envp)
 	int	fd[2];
 	int	pid[MAX_PIPES];
 	int	prev_pipe[2];
-	int status;
-	
+	int	status;
+
 	prev_pipe[READ] = files[I];
 	prev_pipe[WRITE] = files[O];
 	status = 0;

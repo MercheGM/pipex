@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/11 21:11:17 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:40:27 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@
 # define O 1
 
 # define MAX_PIPES 1024
+
 //main_bonus.c
 //main function
 
 //pipes_bonus.c
 int		ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
-int 	ft_pipeline(int *files, char **commands, char **envp);
+int		ft_pipeline(int *files, char **commands, char **envp);
 int		ft_openf(char *name_file, int open_mode);
 void	ft_parent(int *fd, int *fd_saved);
 
@@ -53,7 +54,6 @@ void	ft_create_fd(int *fd);
 
 //split_bonus.c
 char	**ft_split_bash(char *str);
-
 
 void	ft_closefd_save(int fd);
 #endif
