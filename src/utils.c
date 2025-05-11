@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 12:33:32 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/09 19:14:52 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:08:11 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 /*Closes all file descriptors*/
 void	ft_close_all(int *fd1, int *fd2)
 {
-	close(fd1[READ]);
-	close(fd1[WRITE]);
-	close(fd2[READ]);
-	close(fd2[WRITE]);
-	//exit(EXIT_SUCCESS);
+	ft_closefd_save(fd1[READ]);
+	ft_closefd_save(fd1[WRITE]);
+	ft_closefd_save(fd2[READ]);
+	ft_closefd_save(fd2[WRITE]);
 }
 
 /*It duplicates fd1 to fd2 and closes it. Besides, it closes fd_close*/
 void	ft_dup_close(int fd1, int fd2, int fd_close)
 {
 	dup2(fd1, fd2);
-	close(fd1);
-	close(fd_close);
+	ft_closefd_save(fd1);
+	ft_closefd_save(fd_close);
 }
 
 /*Print help if the inputs are invalid*/
@@ -57,6 +56,6 @@ void	ft_create_fd(int *fd)
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
-		exit(errno);
+		exit (errno);
 	}
 }

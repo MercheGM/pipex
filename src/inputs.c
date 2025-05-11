@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/09 19:17:27 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:10:09 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ static char	**ft_free_str(char **str)
 	free(str);
 	return (NULL);
 }
+
+static void	ft_free_strings(char **str1, char ***str2, char ***str3)
+{
+	*str1 = ft_memfree(*str1);
+	*str2 = ft_free_str(*str2);
+	*str3 = ft_free_str(*str3);
+}
+
 
 /*Function adds NULL to the end of the args pointer*/
 static char	**ft_add_null(char **args)
@@ -59,33 +67,24 @@ int	check_command(char *command, char **envp, int status)
 	char	*path;
 	char	**args;
 
-	if (!status)
+	args = ft_split_bash(command);	
+	if (!status || (args == NULL))
 	{
-		args = ft_split_bash(command);
-		if (args == NULL)
-			exit (errno);
 		envp = ft_add_null(envp);
 		path = ft_strjoin("/usr/bin/", args[0]);
-		//printf("path: %s\n", path);
-		//int acc = access(path, X_OK);
-		//printf("acc: %d\n", acc);
-		//if (acc == -1)
 		if (access(path, X_OK) == -1)
 		{
-			path = ft_memfree(path);
-			args = ft_free_str(args);
-			envp = ft_free_str(envp);
+			ft_free_strings(&path, &args, &envp);
 			perror("access");
 			return (EXIT_FAILURE);
 		}
 		if (execve(path, args, envp)  == -1)
 		{
-			path = ft_memfree(path);
-			args = ft_free_str(args);
-			envp = ft_free_str(envp);
+			ft_free_strings(&path, &args, &envp);
 			perror("execve");
 			return (EXIT_FAILURE);
 		}
+		ft_free_strings(&path, &args, &envp);
 		return (EXIT_SUCCESS);
 	}
 	return (EXIT_FAILURE);
@@ -95,6 +94,6 @@ int	check_command(char *command, char **envp, int status)
  fd[READ] to the previous fd*/
 void	ft_parent(int *fd, int *fd_saved)
 {
-	close(fd[WRITE]);
+	ft_closefd_save(fd[WRITE]);
 	fd_saved[READ] = fd[READ];
 }
