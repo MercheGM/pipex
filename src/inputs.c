@@ -6,12 +6,13 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/11 21:37:53 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:36:09 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*Free a ptr strings*/
 static char	**ft_free_str(char **str)
 {
 	int	n;
@@ -26,6 +27,7 @@ static char	**ft_free_str(char **str)
 	return (NULL);
 }
 
+/*Free 3 strings as inputs*/
 static void	ft_free_strings(char **str1, char ***str2, char ***str3)
 {
 	*str1 = ft_memfree(*str1);
@@ -61,7 +63,7 @@ static char	**ft_add_null(char **args)
 /*Checks the command and excecutes it. Funtion checks first if the command
 exits and then it splits the info from the command and gets the enviroment
 info where it's going to be excecuted the command*/
-int	check_command(char *command, char **envp, int status)
+int	check_exec(char *command, char **envp, int status)
 {
 	char	*path;
 	char	**args;
@@ -95,5 +97,4 @@ void	ft_parent(int *fd, int *fd_saved)
 {
 	ft_closefd_save(fd[WRITE]);
 	fd_saved[READ] = fd[READ];
-	ft_closefd_save(fd[READ]);
 }

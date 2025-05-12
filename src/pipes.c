@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:21:46 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/11 21:40:45 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:50:05 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,11 @@ int	ft_pipeline(int *files, char **commands, char **envp)
 	i = -1;
 	while (++i < ft_count_string(commands) - 3)
 	{
-		ft_create_fd(fd);
-		pid[i] = fork();
+		pid[i] = ft_createfd_fork(fd);
 		if (pid[i] == 0)
 		{
 			status = ft_redirect_fd(prev_pipe, commands, fd, i + 2);
-			if (status != 0 || check_command(commands[i + 2], envp, status) != 0)
+			if (status != 0 || check_exec(commands[i + 2], envp, status) != 0)
 				return (EXIT_FAILURE);
 			ft_closefd_save(files[O]);
 			ft_closefd_save(files[I]);
@@ -68,8 +67,18 @@ int	ft_pipeline(int *files, char **commands, char **envp)
 		else
 			ft_parent(fd, prev_pipe);
 	}
+	return (ft_wait_closefd(pid, ft_count_string(commands) - 3, fd, prev_pipe));
+}
+
+/*Waits all the PID child and close fds*/
+int	ft_wait_closefd(pid_t *pid, int num_commands, int *fd, int *prev_pipe)
+{
+	int	i;
+	int	status;
+
+	status = 0;
 	i = -1;
-	while (++i < ft_count_string(commands) - 3)
+	while (++i < num_commands)
 		waitpid(pid[i], &status, 0);
 	ft_close_all(fd, prev_pipe);
 	return (WEXITSTATUS(status));

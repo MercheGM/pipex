@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/11 21:40:27 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:49:10 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,17 @@ int		ft_openf(char *name_file, int open_mode);
 void	ft_parent(int *fd, int *fd_saved);
 
 //inputs_bonus.c
-int		check_command(char *command, char **envp, int status);
+int		check_exec(char *command, char **envp, int status);
 
 //utils_bonus.c
 void	ft_print_help(void);
 void	ft_dup_close(int fd1, int fd2, int fd_close);
 void	ft_close_all(int *fd1, int *fd2);
 int		ft_count_string(char **string);
-void	ft_create_fd(int *fd);
+pid_t	ft_createfd_fork(int *fd);
 
 //split_bonus.c
 char	**ft_split_bash(char *str);
-
+int		ft_wait_closefd(pid_t *pid, int num_commands, int *fd, int *prev_pipe);
 void	ft_closefd_save(int fd);
 #endif

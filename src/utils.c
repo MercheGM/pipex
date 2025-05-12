@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 12:33:32 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/11 21:29:07 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:39:56 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,12 @@ int	ft_count_string(char **string)
 }
 
 /*Function to create pipe and check any error. It exits if error*/
-void	ft_create_fd(int *fd)
+pid_t	ft_createfd_fork(int *fd)
 {
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
 		exit (errno);
 	}
+	return (fork());
 }
