@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:05:31 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/12 20:49:10 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:02:35 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,28 @@
 
 # define MAX_PIPES 1024
 
-//main_bonus.c
+//main.c
 //main function
 
-//pipes_bonus.c
-int		ft_redirect_fd(int *prev_pipe, char **commands, int *fd, int i);
+//pipes.c
 int		ft_pipeline(int *files, char **commands, char **envp);
-int		ft_openf(char *name_file, int open_mode);
-void	ft_parent(int *fd, int *fd_saved);
+//
 
-//inputs_bonus.c
+//inputs.c
 int		check_exec(char *command, char **envp, int status);
 
-//utils_bonus.c
+//utils.c
 void	ft_print_help(void);
-void	ft_dup_close(int fd1, int fd2, int fd_close);
-void	ft_close_all(int *fd1, int *fd2);
 int		ft_count_string(char **string);
-pid_t	ft_createfd_fork(int *fd);
 
-//split_bonus.c
+//split.c
 char	**ft_split_bash(char *str);
-int		ft_wait_closefd(pid_t *pid, int num_commands, int *fd, int *prev_pipe);
-void	ft_closefd_save(int fd);
+
+//utils_fd.c
+void	ft_dup_close(int fd1, int fd2, int fd_close);
+void	ft_closefd(int fd);
+void	ft_parent_fd(int *fd, int *fd_saved);
+void	ft_close_fds(int *fd1, int *fd2);
+int		ft_openfiles(char *name_file, int open_mode);
+
 #endif
