@@ -12,10 +12,9 @@ PATH_SRC_B	= src_bonus/
 PATH_OBJ    = obj/
 PATH_OBJ_B    = obj_bonus/
 
-#NAME            = pipex
-#NAME_B          = pipex_bonus
-NAME            = pipex_bonus
-NAME_B          = pipex
+NAME            = pipex
+NAME_B          = pipex_bonus
+
 
 NAME_LIBFT      = libftprintf.a
 NAME_GNL_P      = libgnl_p.a
