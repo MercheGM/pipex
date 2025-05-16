@@ -12,8 +12,11 @@ PATH_SRC_B	= src_bonus/
 PATH_OBJ    = obj/
 PATH_OBJ_B    = obj_bonus/
 
-NAME            = pipex
-NAME_B          = pipex_bonus
+#NAME            = pipex
+#NAME_B          = pipex_bonus
+NAME            = pipex_bonus
+NAME_B          = pipex
+
 NAME_LIBFT      = libftprintf.a
 NAME_GNL_P      = libgnl_p.a
 NAME_INC		= pipex.h
@@ -28,12 +31,14 @@ SRC	=	$(PATH_SRC)main.c \
 		$(PATH_SRC)inputs.c \
 		$(PATH_SRC)pipes.c \
 		$(PATH_SRC)split.c \
-		$(PATH_SRC)utils.c 
+		$(PATH_SRC)utils.c \
+		$(PATH_SRC)utils_fd.c
 SRC_BONUS	=	$(PATH_SRC_B)main_bonus.c \
-			$(PATH_SRC_B)inputs_bonus.c \
-			$(PATH_SRC_B)pipes_bonus.c \
-			$(PATH_SRC_B)utils_bonus.c \
-			$(PATH_SRC_B)split_bonus.c 
+				$(PATH_SRC_B)inputs_bonus.c \
+				$(PATH_SRC_B)pipes_bonus.c \
+				$(PATH_SRC_B)utils_bonus.c \
+				$(PATH_SRC_B)split_bonus.c \
+				$(PATH_SRC_B)utils_fd_bonus.c 
 OBJ	=	$(patsubst $(PATH_SRC)%.c, $(PATH_OBJ)%.o, $(SRC))
 OBJ_B	=	$(patsubst $(PATH_SRC_B)%.c, $(PATH_OBJ_B)%.o, $(SRC_BONUS))
 

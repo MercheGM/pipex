@@ -6,7 +6,7 @@
 /*   By: mergarci <mergarci@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:42:59 by mergarci          #+#    #+#             */
-/*   Updated: 2025/05/06 20:46:09 by mergarci         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:36:54 by mergarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ static char	**ft_free_str(char **str)
 	}
 	free(str);
 	return (NULL);
+}
+
+/*Free 3 strings as inputs*/
+static void	ft_free_strings(char **str1, char ***str2, char ***str3)
+{
+	*str1 = ft_memfree(*str1);
+	*str2 = ft_free_str(*str2);
+	*str3 = ft_free_str(*str3);
 }
 
 /*Function adds NULL to the end of the args pointer*/
@@ -55,39 +63,30 @@ static char	**ft_add_null(char **args)
 /*Checks the command and excecutes it. Funtion checks first if the command
 exits and then it splits the info from the command and gets the enviroment
 info where it's going to be excecuted the command*/
-int	check_command(char *command, char **envp)
+int	check_exec(char *command, char **envp, int status)
 {
 	char	*path;
 	char	**args;
 
 	args = ft_split_bash(command);
-	if (args == NULL)
-		exit (errno);
-	envp = ft_add_null(envp);
-	path = ft_strjoin("/usr/bin/", args[0]);
-	if (access(path, X_OK) < 0)
+	if (!status || (args == NULL))
 	{
-		path = ft_memfree(path);
-		args = ft_free_str(args);
-		envp = ft_free_str(envp);
-		perror("access");
-		exit(errno);
+		envp = ft_add_null(envp);
+		path = ft_strjoin("/usr/bin/", args[0]);
+		if (access(path, X_OK) == -1)
+		{
+			ft_free_strings(&path, &args, &envp);
+			perror("access");
+			return (EXIT_FAILURE);
+		}
+		if (execve(path, args, envp) == -1)
+		{
+			ft_free_strings(&path, &args, &envp);
+			perror("execve");
+			return (EXIT_FAILURE);
+		}
+		ft_free_strings(&path, &args, &envp);
+		return (EXIT_SUCCESS);
 	}
-	if (execve(path, args, envp) == -1)
-	{
-		path = ft_memfree(path);
-		args = ft_free_str(args);
-		envp = ft_free_str(envp);
-		perror("execve");
-		exit(errno);
-	}
-	return (errno);
-}
-
-/*Only to be used at parent process. It closes fd[WRITE], copies
- fd[READ] to the previous fd*/
-void	ft_parent(int *fd, int *fd_saved)
-{
-	close(fd[WRITE]);
-	fd_saved[READ] = fd[READ];
+	return (EXIT_FAILURE);
 }
